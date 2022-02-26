@@ -77,9 +77,6 @@ export default function Index() {
         <Card icon="🧫" label="Tamponi" value={data.tests_count} variation={data.tests_variation} />
       </main>
       <footer className="relative flex flex-col justify-center items-center bottom-0 left-0 w-full p-4 border-t-[1px] border-gray-300 text-sm text-gray-700 bg-white md:fixed">
-        <div>
-          Made with <span aria-label="love">❤️</span> by Emilio Schepis
-        </div>
         <div className="space-x-2">
           <a className="text-blue-600" href="https://github.com/emilioschepis/covidinit">
             Source
@@ -87,6 +84,10 @@ export default function Index() {
           <span aria-hidden>•</span>
           <a className="text-blue-600" href="https://twitter.com/emilioschepis">
             Twitter
+          </a>
+          <span aria-hidden>•</span>
+          <a className="text-blue-600" href="https://github.com/pcm-dpc/COVID-19">
+            Data
           </a>
         </div>
       </footer>
