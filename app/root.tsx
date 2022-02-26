@@ -8,7 +8,7 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Covidin.it | Statistiche in tempo reale",
+    title: "Covidin.it | Statistiche Covid in tempo reale",
     description: "Informazioni e statistiche aggiornate sullo stato del COVID-19 in Italia.",
     keywords: "covid,informazioni,statistiche,italia,covid19,covid-19,pandemia,virus",
   };
