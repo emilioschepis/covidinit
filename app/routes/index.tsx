@@ -1,11 +1,12 @@
 import dayjs from "dayjs";
 import { json, LoaderFunction, useLoaderData } from "remix";
 import Card from "~/components/Card";
+import RegionCard from "~/components/RegionCard";
 import { NATIONAL_TREND_URL, REGIONAL_TREND_URL } from "~/constants";
-import { convertNationalData } from "~/lib/converters";
-import { NationalData, NationalDataResponse, RegionalDataResponse } from "~/models";
+import { convertNationalData, convertRegionalData } from "~/lib/converters";
+import { NationalData, NationalDataResponse, RegionalData, RegionalDataResponse } from "~/models";
 
-type LoaderData = { national: NationalData };
+type LoaderData = { national: NationalData; regional: RegionalData };
 
 export const loader: LoaderFunction = async (): Promise<Response> => {
   const [national, regional] = await Promise.all([
@@ -16,6 +17,7 @@ export const loader: LoaderFunction = async (): Promise<Response> => {
   return json(
     {
       national: convertNationalData(national),
+      regional: convertRegionalData(regional).sort((a, b) => b.positives.today - a.positives.today),
     },
     {
       headers: {
@@ -26,7 +28,7 @@ export const loader: LoaderFunction = async (): Promise<Response> => {
 };
 
 export default function Index() {
-  const { national } = useLoaderData<LoaderData>();
+  const { national, regional } = useLoaderData<LoaderData>();
 
   return (
     <div className="pt-4 space-y-4">
@@ -37,8 +39,8 @@ export default function Index() {
         </p>
       </header>
 
-      <main className="px-4 md:mb-20">
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 mb-4">
+      <main className="px-4 mb-20">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 mb-8">
           <Card icon="🦠" label="Totali" trend={national.cases} />
           <Card icon="🟢" label="Guariti" trend={national.recovered} />
           <Card icon="🔴" label="Positivi" trend={national.positives} variationCanImprove />
@@ -53,6 +55,12 @@ export default function Index() {
             trend={national.positiveTestsRate}
             variationCanImprove
           />
+        </div>
+        <h2 className="text-2xl font-bold mb-4">Dati per regione</h2>
+        <div className="flex flex-col gap-4">
+          {regional.map((region) => (
+            <RegionCard key={region.id} region={region} />
+          ))}
         </div>
       </main>
       <footer className="relative flex flex-col justify-center items-center bottom-0 left-0 w-full p-4 border-t-[1px] border-gray-300 text-sm text-gray-700 bg-white md:fixed">

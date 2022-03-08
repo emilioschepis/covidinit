@@ -1,4 +1,4 @@
-import { NationalData, NationalDataResponse } from "~/models";
+import { NationalData, NationalDataResponse, RegionalData, RegionalDataResponse } from "~/models";
 
 export function convertNationalData(data: NationalDataResponse[]): NationalData {
   const today = data[data.length - 1];
@@ -50,4 +50,17 @@ export function convertNationalData(data: NationalDataResponse[]): NationalData 
         yesterday.nuovi_positivi / (yesterday.tamponi - twoDaysAgo.tamponi),
     },
   };
+}
+
+export function convertRegionalData(data: RegionalDataResponse[]): RegionalData {
+  return data.map((region) => ({
+    id: region.codice_regione.toString(),
+    date: region.data,
+    name: region.denominazione_regione,
+    positives: {
+      today: region.totale_positivi,
+      yesterday: region.totale_positivi - region.variazione_totale_positivi,
+      variation: region.variazione_totale_positivi,
+    },
+  }));
 }

@@ -49,7 +49,7 @@ export default function Card({ icon, trend, label, type = "absolute", variationC
   }, [trend.variation, variationCanImprove]);
 
   return (
-    <div className="bg-white rounded-lg p-4 flex flex-col items-stretch shadow-md space-y-4">
+    <div className="bg-white rounded-lg p-4 flex flex-col items-stretch shadow space-y-4">
       <p aria-label={label} className="text-xl text-center font-bold">
         {icon} {label}
       </p>

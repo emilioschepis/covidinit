@@ -36,3 +36,10 @@ export type NationalData = {
   tests: Trend;
   positiveTestsRate: Trend;
 };
+
+export type RegionalData = {
+  id: string;
+  date: string;
+  name: string;
+  positives: Trend;
+}[];
