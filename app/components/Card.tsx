@@ -1,10 +1,10 @@
 import { useMemo } from "react";
+import { Trend } from "~/models";
 
 type Props = {
   icon: string;
-  variation: number;
-  value: number;
   label: string;
+  trend: Trend;
   type?: "absolute" | "percent";
 
   /**
@@ -13,7 +13,7 @@ type Props = {
   variationCanImprove?: boolean;
 };
 
-export default function Card({ icon, variation, value, label, type = "absolute", variationCanImprove = false }: Props) {
+export default function Card({ icon, trend, label, type = "absolute", variationCanImprove = false }: Props) {
   const variationFormatter = useMemo(
     () =>
       Intl.NumberFormat("it-IT", {
@@ -38,24 +38,34 @@ export default function Card({ icon, variation, value, label, type = "absolute",
 
   const variationTextColor = useMemo(() => {
     if (!variationCanImprove) {
-      return "text-black";
+      return "text-gray-800";
     }
 
-    if (variation <= 0) {
+    if (trend.variation <= 0) {
       return "text-green-600";
     } else {
       return "text-red-600";
     }
-  }, [variation, variationCanImprove]);
+  }, [trend.variation, variationCanImprove]);
 
   return (
-    <div className="bg-white rounded-lg p-4 flex flex-col items-center shadow-md">
-      <p aria-hidden className="text-4xl mb-4">
-        {icon}
+    <div className="bg-white rounded-lg p-4 flex flex-col items-stretch shadow-md space-y-4">
+      <p aria-label={label} className="text-xl text-center font-bold">
+        {icon} {label}
       </p>
-      <p className={`text-sm font-bold ${variationTextColor}`}>{variationFormatter.format(variation)}</p>
-      <p className="text-2xl font-black">{valueFormatter.format(value)}</p>
-      <p className="text-gray-600 text-center">{label}</p>
+      <p className={`text-3xl font-black ${variationTextColor} text-center`}>
+        {variationFormatter.format(trend.variation)}
+      </p>
+      <div className="flex flex-col items-center space-y-2 md:flex-row md:justify-center md:space-y-0 md:space-x-4">
+        <div className="flex flex-col items-center">
+          <p className="text-xl font-bold text-gray-500">{valueFormatter.format(trend.yesterday)}</p>
+          <p className="text-md font-semibold text-gray-500">Ieri</p>
+        </div>
+        <div className="flex flex-col items-center">
+          <p className="text-xl font-bold text-gray-800">{valueFormatter.format(trend.today)}</p>
+          <p className="text-md font-semibold text-gray-800">Oggi</p>
+        </div>
+      </div>
     </div>
   );
 }
